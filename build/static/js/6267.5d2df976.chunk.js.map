@@ -1,0 +1,1 @@
+{"version":3,"file":"static/js/6267.5d2df976.chunk.js","mappings":"2NAEA,MAMA,EANeA,KAEXC,EAAAA,EAAAA,KAACC,SAAQ,CAACC,GAAG,U","sources":["views/pages/logout/Logout.js"],"sourcesContent":["import React from 'react'\n\nconst Logout = () => {\n  return (\n    <Redirect to=\"/login\" />\n  );\n}\n\nexport default Logout\n"],"names":["Logout","_jsx","Redirect","to"],"sourceRoot":""}
