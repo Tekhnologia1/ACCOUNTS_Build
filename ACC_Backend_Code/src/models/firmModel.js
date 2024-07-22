@@ -44,12 +44,13 @@ const firmExists = async (firm_email, firm_gstno) => {
 // New function to get firms by user ID
 const getFirmsByUserId = async (user_id) => {
   const sql = `
-    SELECT f.*, uf.user_id, uf.uf_usr_role
+    SELECT f.*, uf.user_id, uf.uf_usr_role, uf.added_by_user_id
     FROM tbl_firms f
     LEFT JOIN tbl_user_firm uf ON f.firm_id = uf.firm_id
     WHERE uf.user_id = ?`;
   return await query(sql, [user_id]);
 };
+
 
 // Function to get a firm by ID
 const getFirmById = async (firm_id) => {

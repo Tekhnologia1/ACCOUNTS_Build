@@ -33,6 +33,7 @@ publicRoutes.post('/create_firm/:user_id', firmController.createFirmHandler);
 publicRoutes.get('/get_firm_details/:firm_id', firmController.getFirmHandler);
 publicRoutes.get('/get_all_firms', firmController.getAllFirmsHandler);
 publicRoutes.get('/get_all_firms_by_user/:user_id', firmController.getFirmsByUserHandler);
+publicRoutes.get('/get_all_firms_by_adding_user/:user_id', firmController.getFirmsByAddingUserHandler);
 publicRoutes.put('/update_firm_details/:firm_id', firmController.updateFirmHandler);
 publicRoutes.delete('/delete_firm/:firm_id', firmController.deleteFirmHandler);
 publicRoutes.get('/total_bal_of_all_firms/:user_id', firmController.getTotalBalanceByUserHandler);

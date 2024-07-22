@@ -86,6 +86,44 @@ const getFirmsByUserHandler = async (req, res) => {
   }
 };
 
+// New handler to get firms by added_by_user_id
+const getFirmsByAddingUserHandler = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const firms = await getFirmsByUserId(user_id);
+
+    if (!firms || firms.length === 0) {
+      return res.status(404).send({ status: false, message: 'No firms found for this user' });
+    }
+
+    const allFirms = [...firms];
+
+    // Fetch firms added by added_by_user_id for each firm
+    for (const firm of firms) {
+      const additionalFirms = await getFirmsByUserId(firm.added_by_user_id);
+      if (additionalFirms && additionalFirms.length > 0) {
+        allFirms.push(...additionalFirms);
+      }
+    }
+
+    // Remove duplicate firms if any
+    const uniqueFirms = Array.from(new Set(allFirms.map(firm => firm.firm_id)))
+      .map(id => allFirms.find(firm => firm.firm_id === id));
+
+    // Fetch total balance for each firm and add it to the firm data
+    for (const firm of uniqueFirms) {
+      const total_balance = await getTotalBalanceByFirmId(firm.firm_id);
+      firm.total_balance = total_balance;
+    }
+
+    res.status(200).send({ status: true, data: uniqueFirms });
+  } catch (error) {
+    res.status(500).send({ status: false, message: error.message });
+  }
+};
+
+
+
 
 const updateFirmHandler = async (req, res) => {
   try {
@@ -144,4 +182,4 @@ const getTotalBalanceByUserHandler = async (req, res) => {
   }
 };
 
-module.exports = { createFirmHandler, getFirmHandler, getAllFirmsHandler, getFirmsByUserHandler, updateFirmHandler, deleteFirmHandler, getTotalBalanceByUserHandler };
+module.exports = { createFirmHandler, getFirmHandler, getAllFirmsHandler, getFirmsByUserHandler, getFirmsByAddingUserHandler, updateFirmHandler, deleteFirmHandler, getTotalBalanceByUserHandler };
