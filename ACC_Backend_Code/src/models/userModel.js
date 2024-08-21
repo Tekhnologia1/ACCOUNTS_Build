@@ -127,6 +127,26 @@ const assignFirmToUser = async (user_id, firm_id, added_by_user_id) => {
   }
 };
 
+// const updateFirmUser = async (uf_id, user_id, firm_ids, added_by_user_id) => {
+//   const deleteOldFirmsQuery = 'DELETE FROM tbl_user_firm WHERE user_id = ?';
+//   await query(deleteOldFirmsQuery, [user_id]);
+
+//   const userRoleQuery = 'SELECT usr_role FROM tbl_users WHERE user_id = ?';
+//   const [user] = await query(userRoleQuery, [user_id]);
+//   const userRole = user.usr_role;
+
+//   const assignFirmQuery = 'INSERT INTO tbl_user_firm (user_id, firm_id, uf_usr_role, added_by_user_id) VALUES (?, ?, ?, ?)';
+
+//   for (const firm_id of firm_ids) {
+//     await query(assignFirmQuery, [user_id, firm_id, userRole, added_by_user_id]);
+//   }
+// };
+
+const updateFirmUser = async (uf_id, user_id, firm_id) => {
+  const sql = 'UPDATE tbl_user_firm SET user_id = ?, firm_id = ? WHERE uf_id = ?';
+  await query(sql, [user_id, firm_id, uf_id]);
+};
+
 const firmUser = async (uf_id) => {
   const sql = `
     SELECT uf.uf_id, uf.uf_usr_role, uf.user_id, u.usr_name, uf.firm_id, f.firm_name 
@@ -138,10 +158,6 @@ const firmUser = async (uf_id) => {
   return firmUserDetails;
 };
 
-const updateFirmUser = async (uf_id, user_id, firm_id) => {
-  const sql = 'UPDATE tbl_user_firm SET user_id = ?, firm_id = ? WHERE uf_id = ?';
-  await query(sql, [user_id, firm_id, uf_id]);
-};
 
 const deleteFirmUser = async (uf_id) => {
   const sql = 'DELETE FROM tbl_user_firm WHERE uf_id = ?';

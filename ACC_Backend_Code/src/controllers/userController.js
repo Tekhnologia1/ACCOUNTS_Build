@@ -136,21 +136,22 @@ const assignFirmToUserHandler = async (req, res) => {
   }
 };
 
-// Get firm user
-const firmUserHandler = async (req, res) => {
-  try {
-    const { uf_id } = req.params;
-    const firmUserDetails = await firmUser(uf_id);
+// // Update firm user
+// const updateFirmUserHandler = async (req, res) => {
+//   try {
+//     const { uf_id } = req.params;
+//     const { user_id, firm_ids, added_by_user_id } = req.body;
 
-    if (!firmUserDetails) {
-      return res.status(404).send({ status: false, message: 'Firm user not found' });
-    }
+//     if (!user_id || !firm_ids || !Array.isArray(firm_ids) || added_by_user_id) {
+//       return res.status(400).send({ status: false, message: 'user_id and firm_ids (array) are required' });
+//     }
 
-    res.status(200).send({ status: true, data: firmUserDetails });
-  } catch (error) {
-    res.status(500).send({ status: false, message: error.message });
-  }
-};
+//     await updateFirmUser(uf_id, user_id, firm_ids, added_by_user_id);
+//     res.status(200).send({ status: true, message: 'Firm user updated successfully' });
+//   } catch (error) {
+//     res.status(500).send({ status: false, message: error.message });
+//   }
+// };
 
 // Update firm user
 const updateFirmUserHandler = async (req, res) => {
@@ -168,6 +169,24 @@ const updateFirmUserHandler = async (req, res) => {
     res.status(500).send({ status: false, message: error.message });
   }
 };
+
+// Get firm user
+const firmUserHandler = async (req, res) => {
+  try {
+    const { uf_id } = req.params;
+    const firmUserDetails = await firmUser(uf_id);
+
+    if (!firmUserDetails) {
+      return res.status(404).send({ status: false, message: 'Firm user not found' });
+    }
+
+    res.status(200).send({ status: true, data: firmUserDetails });
+  } catch (error) {
+    res.status(500).send({ status: false, message: error.message });
+  }
+};
+
+
 
 // Delete firm user
 const deleteFirmUserHandler = async (req, res) => {

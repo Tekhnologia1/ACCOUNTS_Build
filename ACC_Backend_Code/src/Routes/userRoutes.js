@@ -6,8 +6,10 @@ const geneLedgerController = require('../controllers/geneLedController');
 const paymentController = require('../controllers/paymentController');
 const receiptController = require('../controllers/receiptController');
 const firmAllTransactionsController = require('../controllers/firmAllTransactionsController');
+const dayBookController = require('../controllers/dayBookController');
 
 const publicRoutes = express.Router();
+
 const protectedRoutes = express.Router();
 
 // Public routes
@@ -54,20 +56,22 @@ publicRoutes.put('/update_general_ledgers/:firm_id/:gl_id', geneLedgerController
 publicRoutes.delete('/delete_general_ledgers/:firm_id/:gl_id', geneLedgerController.deleteGeneralLedgerHandler);
 
 
-
+// // APIs for Payment
 publicRoutes.post('/payment/:user_id', paymentController.createPaymentHandler );
 publicRoutes.get('/show_payment_transac/:from_firm_id', paymentController.getTransactionsByFirmIdHandler );
 publicRoutes.get('/show_payment_details/:transaction_id', paymentController.getPaymentHandler);
 publicRoutes.get('/firm_total_bal/:firm_id', paymentController.getTotalBalanceByFirmIdHandler);
 
 
+// // APIs for Receipt
 
 publicRoutes.post('/receipt/:user_id', receiptController.createReceipt);
 publicRoutes.get('/show_receipt_transactions/:to_firm_id', receiptController.getReceiptsByFirm);
 // publicRoutes.put('/update_sub_ledgers/:lgr_id', userController.update_sub_ledgers);
 // publicRoutes.delete('/delete_sub_ledgers/:lgr_id', userController.delete_sub_ledgers);
 publicRoutes.get('/show_firm_all_transactions/:firm_id/transactions', firmAllTransactionsController.getAllFirmTransactionsHandler);
-
+// publicRoutes.get('/show_day_book_transactions/:firm_id', dayBookController.dayBookHandler);
+publicRoutes.get('/show_day_book_transactions/:user_id', dayBookController.dayBookHandler);
 
 
 // publicRoutes.post('/create_transactions', createTransaction);

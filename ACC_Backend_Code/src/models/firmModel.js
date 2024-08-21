@@ -14,16 +14,15 @@ const linkUserToFirm = async (user_id, firm_id, role) => {
 };
 
 // Existing function to get a firm by ID
-// const getFirmById = async (firm_id) => {
-//   const sql = `
-//     SELECT f.*, uf.user_id, uf.uf_usr_role
-//     FROM tbl_firms f
-//     LEFT JOIN tbl_user_firm uf ON f.firm_id = uf.firm_id
-//     WHERE f.firm_id = ?`;
-//   const [firm] = await query(sql, [firm_id]);
-//   return firm;
-// };
-
+const getFirmById = async (firm_id) => {
+  const sql = `
+    SELECT f.*, uf.user_id, uf.uf_usr_role
+    FROM tbl_firms f
+    LEFT JOIN tbl_user_firm uf ON f.firm_id = uf.firm_id
+    WHERE f.firm_id = ?`;
+  const [firm] = await query(sql, [firm_id]);
+  return firm;
+};
 
 // Existing function to get all firms
 const getAllFirms = async () => {
@@ -41,7 +40,14 @@ const firmExists = async (firm_email, firm_gstno) => {
   return firm;
 };
 
-// New function to get firms by user ID
+// New function to check if a firm name exists
+const firmNameExists = async (firm_name) => {
+  const sql = 'SELECT * FROM tbl_firms WHERE firm_name = ?';
+  const [firm] = await query(sql, [firm_name]);
+  return firm;
+};
+
+// Function to get firms by user ID
 const getFirmsByUserId = async (user_id) => {
   const sql = `
     SELECT f.*, uf.user_id, uf.uf_usr_role, uf.added_by_user_id
@@ -49,18 +55,6 @@ const getFirmsByUserId = async (user_id) => {
     LEFT JOIN tbl_user_firm uf ON f.firm_id = uf.firm_id
     WHERE uf.user_id = ?`;
   return await query(sql, [user_id]);
-};
-
-
-// Function to get a firm by ID
-const getFirmById = async (firm_id) => {
-  const sql = `
-    SELECT f.*, uf.user_id, uf.uf_usr_role
-    FROM tbl_firms f
-    LEFT JOIN tbl_user_firm uf ON f.firm_id = uf.firm_id
-    WHERE f.firm_id = ?`;
-  const [firm] = await query(sql, [firm_id]);
-  return firm;
 };
 
 // Function to update a firm
@@ -80,19 +74,6 @@ const deleteFirm = async (firm_id) => {
   await query(deleteFirmSql, [firm_id]);
 };
 
-
-// // Function to get total balance for each firm_id
-// const getTotalBalanceByFirmId = async (firm_id) => {
-//   const sql = `
-//     SELECT SUM(gl.balance) as total_balance
-//     FROM tbl_general_ledgers gl
-//     WHERE gl.firm_id = ?
-//   `;
-//   const [result] = await query(sql, [firm_id]);
-//   return result.total_balance;
-// };
-
-
 // Function to get total balance for a user
 const getTotalBalanceByUserId = async (user_id) => {
   const sql = `
@@ -106,4 +87,4 @@ const getTotalBalanceByUserId = async (user_id) => {
 };
 
 
-module.exports = { createFirm, getFirmById, getAllFirms, firmExists, linkUserToFirm, getFirmsByUserId, updateFirm, deleteFirm, getTotalBalanceByUserId };
+module.exports = { createFirm, getFirmById, getAllFirms, firmExists, linkUserToFirm, firmNameExists, getFirmsByUserId, updateFirm, deleteFirm, getTotalBalanceByUserId };

@@ -1,4 +1,4 @@
-const { createFirm, getFirmById, getAllFirms, firmExists, linkUserToFirm, getFirmsByUserId, updateFirm, deleteFirm, getTotalBalanceByUserId } = require('../models/firmModel');
+const { createFirm, getFirmById, getAllFirms, firmExists, linkUserToFirm, firmNameExists, getFirmsByUserId, updateFirm, deleteFirm, getTotalBalanceByUserId } = require('../models/firmModel');
 const { getTotalBalanceByFirmId } = require('../models/paymentModel');
 
 
@@ -8,12 +8,13 @@ const createFirmHandler = async (req, res) => {
     const { firm_name, firm_email, firm_gstno, firm_address, firm_status } = req.body;
     const { user_id } = req.params;
 
-    // if (req.user.usr_role !== 'Super Admin') {
-    //   return res.status(403).send({ status: false, message: 'Only Super Admins can create firms' });
-    // }
-
     if (!firm_name || !firm_email || !firm_gstno || !firm_address || !firm_status) {
       return res.status(400).send({ status: false, message: 'All fields are required' });
+    }
+
+    const existingFirmByName = await firmNameExists(firm_name);
+    if (existingFirmByName) {
+      return res.status(400).send({ status: false, message: 'Firm name already exists' });
     }
 
     const existingFirm = await firmExists(firm_email, firm_gstno);
@@ -73,7 +74,7 @@ const getFirmsByUserHandler = async (req, res) => {
     if (!firms || firms.length === 0) {
       return res.status(404).send({ status: false, message: 'No firms found for this user' });
     }
-
+    console.log(firms);
     // Fetch total balance for each firm and add it to the firm data
     for (const firm of firms) {
       const total_balance = await getTotalBalanceByFirmId(firm.firm_id);
